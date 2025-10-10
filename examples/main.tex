@@ -1,4 +1,4 @@
-\documentclass[12pt]{article}
+\documentclass[12pt]{report}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{inconsolata} 
@@ -44,7 +44,6 @@
 
 \lstset{
     style=mystyle,
-    language=C++,
     morekeywords={std::vector, size_t}
 }
 
@@ -53,8 +52,12 @@
 \newtheorem{theorem}{Theorem}[section]
 \newtheorem{example}{Example}[section]
 
+\newcommand{\ihat}{\hat{\imath}}
+\newcommand{\jhat}{\hat{\jmath}}
+\newcommand{\khat}{\hat{k}}
+
 \title{A CS Guide to Linear Algebra from Scratch}
-\author{Strings}
+\author{Strings, zach.waffle}
 \date{September 2025}
 
 \begin{document}
@@ -65,30 +68,29 @@
     This guide was made to help programmers learn linear algebra concepts with a CS perspective with as little background knowledge as possible. The main focus will be on understanding the underlying principles behind practical applications as well as how they interact with the theoretical ones.
 \end{abstract}
 
-\section{Introduction}
-    Linear algebra is a section of math dedicated to solving systems of linear equations and understanding geometric concepts such as planes and lines. The underlying foundation of linear algebra is vectors and matrices (the plural of "matrix"). From a CS perspective the use of a linear algebra can often be seen in graphics, machine learning and cryptography.
+\chapter{Introduction}
+    Linear algebra is a section of math dedicated to solving systems of linear equations and understanding geometric concepts such as planes and lines. The underlying foundation of linear algebra is vectors and matrices (the plural of "matrix"). From a CS perspective, the use of linear algebra can often be seen in graphics, machine learning, and cryptography.
     This paper will be used to build from the basic fundamentals to an above surface knowledge of the topic from the math and its computational implementation.
 
-\section{Basic Concepts}
-    \subsection{Scalar}
+\chapter{Basic Concepts}
+    \section{Scalar}
         A scalar refers to a normal number used in a vector operation.
-        They are typically \textbf{real numbers ($\mathbb{R}$)} or \textbf{complex numbers ($\mathbb{C}$)} 
+        They are typically \emph{real numbers ($\mathbb{R}$)} or \emph{complex numbers ($\mathbb{C}$)} 
         
-    \subsection{Vectors}
-        Vectors are one of the biggest building blocks for linear algebra. 
-        At its core, a vector is just a list of numbers. For example, consider the vector:
+    \section{Vectors}
+        Vectors are one of the biggest building blocks of linear algebra. Vectors are often represented with an arrow (such as $\vec{v}$) or with bold (such as $\mathbf{v}$
+        At its core, a vector is just a list of objects. For example, consider the vector:
 
         \begin{equation}
-            \mathbf{v} = \begin{bmatrix} 2 \\ 5 \\ -1 \end{bmatrix}
+            \vec{v} = \begin{bmatrix} 2 \\ 5 \\ -1 \end{bmatrix}
         \end{equation} \\
 
         This vector has 3 components: 2, 5, -1. \\
-        Vectors are used to store information, a common use of a vector is store location.
+        Vectors are used to store information; a common use of a vector is to store a location.
 
-        \subsubsection{Vector Sets}
-            Before we continue lets explain what a \textbf{vector set} is.
-            A \textbf{vector set} is a collection of vectors, a bundle of vectors put in set. You think of them as "the vectors we're allowed to consider"
-            \textbf{Example:} 
+        \subsection{Vector Sets}
+            A \emph{vector set} is a collection of vectors, a bundle of vectors put in a set. You think of them as "the vectors we're allowed to consider"
+            \emph{Example:} 
             \begin{equation}
                 S = \left\{ 
                     \begin{bmatrix}1\\0\end{bmatrix}, 
@@ -101,8 +103,10 @@
             \\\\
             Later, we'll see a \textbf{vector space}, which is a special type of vector set. In a vector space, you can combine vectors or stretch them, and you’ll never leave the set — everything still stays inside the set.
 
-        \subsubsection{Vector Space}
-            Now that we understand what a \textbf{vector set} is — a collection of vectors let's talk about a \textbf{vector space} It is a special type of vector set where you can do two things freely:
+            Set theory is a large field within mathematics, and there are a lot of resources available online to help learn it!
+
+        \subsection{Vector Space}
+            Now that we understand what a \textbf{vector set} is — a collection of vectors, let's talk about a \textbf{vector space} It is a special type of vector set where you can do two things freely:
 
             \begin{enumerate}
                 \item \textbf{Add any two vectors} from the set, and the result is still in the set.
@@ -118,8 +122,7 @@
                 \mathbb{R}^2 = \left\{ \begin{bmatrix}x \\ y\end{bmatrix} \,\bigg|\, x, y \in \mathbb{R} \right\}
             \end{equation} \\
 
-            In non-klingon this means: A 2D vector contains \textbf{x} and \textbf{y}. \\
-            As well, as \textbf{x} and \textbf{y} are \textbf{real numbers}.
+            In non-Klingon, this means that a 2D vector contains $x$ and $y$, and both $x$ and $y$ are real numbers.
 
             \begin{itemize}
                 \item Add two vectors: \\
@@ -134,10 +137,22 @@
             \end{itemize}
 
             Notice how the results stay inside the set — that’s the defining feature of a vector space.
-            
-        \subsubsection{Algebraic}
-            There are multiple ways to view a vector in linear algebra, first is algebraically. Algebraically a vector is a element inside a \textbf{vector space}. \\
-            For example, all 3D vectors form $\mathbb{R}^3$
+
+    \section{Representing Vectors}
+
+    There are multiple ways to represent vectors. This section does not attempt to explain them all.
+    
+        \subsection{Algebraically}
+            Algebraically, a vector is an element of a \emph{vector space}. \\
+            For example, all 3D vectors form $\mathbb{R}^3$, the three-dimensional vector space.
+
+            The primary method of representing a vector is simply as a list of its components:
+            \begin{equation}
+                \vec{v} = 
+                \begin{bmatrix}
+                    3 \\ 4
+                \end{bmatrix}
+            \end{equation}
 
             \begin{itemize}
                 \item  You can add component-wise: \\
@@ -151,37 +166,49 @@
                 \end{equation}
             \end{itemize}
             
-        \subsubsection{Geometric}
+        \subsection{Geometrically}
             \begin{figure}[h]
                 \centering
                 \includegraphics[width=1\textwidth]{examples/1-1.png} 
-                \caption{Geometric representation of 2D Vector.}
+                \caption{Geometric representation of 2D Vectors.}
                 \label{fig:1}
             \end{figure}
         
-            In a 2D Vector, you can visualize a vector as an \textbf{arrow} pointing from the origin of \textbf{(0, 0)} to a point ($x, y$). \\
+            Geometrically, a vector can be visualized as an arrow going from the origin to a point.
             Example:
             \begin{equation}
-                \mathbf{v}_1 = \begin{bmatrix} 3 \\ 3 \end{bmatrix}
-                \mathbf{v}_2 = \begin{bmatrix} -2 \\ 1 \end{bmatrix}
+                \vec{v}_1 = \begin{bmatrix} 3 \\ 3 \end{bmatrix}  
+                \vec{v}_2 = \begin{bmatrix} -2 \\ 1 \end{bmatrix}
             \end{equation}
             
             \begin{figure}[H]
                 \centering
                 \includegraphics[width=1\textwidth]{examples/1-2.png} 
-                \caption{Geometric representation of 3D Vector.}
+                \caption{Geometric representation of 3D Vectors.}
                 \label{fig:2}
             \end{figure}
             
             The same principle works with a 3D vector but pointing to ($x, y, z$) \\
             Example:
             \begin{equation}
-                \mathbf{v}_1 = \begin{bmatrix} 1 \\ 1 \\ 2 \end{bmatrix}
-                \mathbf{v}_2 = \begin{bmatrix} 1 \\ -2 \\ 4 \end{bmatrix}
+                \vec{v}_1 = \begin{bmatrix} 1 \\ 1 \\ 2 \end{bmatrix}
+                \vec{v}_2 = \begin{bmatrix} 1 \\ -2 \\ 4 \end{bmatrix}
             \end{equation}
 
-        \subsubsection{Computer Science Usage}
-            In Computer Science common usages of vectors can be:
+            Geometrically, vectors can also be thought of as the sum of scalar multiples of the \emph{unit vectors}: $\ihat = \begin{bmatrix}
+                1 \\ 0 \\ 0
+            \end{bmatrix}$, $\jhat = \begin{bmatrix}
+                0 \\ 1 \\ 0
+            \end{bmatrix}$, and $\khat = \begin{bmatrix}
+                0 \\ 0 \\ 1
+            \end{bmatrix}$.
+
+            A vector $\vec{v} = \begin{bmatrix}
+                2 \\ -3
+            \end{bmatrix}$ can also be written as $\vec{v} = 2\ihat - 3\jhat$
+
+        \subsubsection{Programmatically}
+            In Computer Science, common usages of vectors can be:
             \begin{itemize}
                 \item A list/array
                 \item Method to represent states (e.g., pixel colors, probability, features in ML)
@@ -191,7 +218,7 @@
             \end{itemize}
 
             \begin{example}[C++ Representation] 
-            Here is a example script
+            Here is an example script using the `vector` class of the C++ standard library.
             \begin{lstlisting}[language=C++]
 #include <iostream>
 #include <vector>
@@ -215,11 +242,11 @@ int main() {
 }
             \end{lstlisting}
             \end{example}
-
-        \subsubsection{Magnitude}
-            The magnitude is a property of a vector that can be written with $"\|"$ surrounding a vector, it measures the length (or norm) of a vector from the Pythagorean theorem:
+    \section{Vector Operations}
+        \subsection{Magnitude}
+            The magnitude of a vector $\vec{v}$, written as $\| \vec{v} \|$, is simply the square root of the squares of each of its elements.
             \begin{equation}
-                ||\mathbf{v}|| = \sqrt{v^2_1 + v^2_2 \cdot\cdot\cdot + v^2_n}
+                ||\vec{v}|| = \sqrt{v^2_1 + v^2_2 \cdot\cdot\cdot + v^2_n}
             \end{equation}
 
             Example:
@@ -227,14 +254,13 @@ int main() {
                 ||\begin{bmatrix} 3 \\ 4 \end{bmatrix}|| = \sqrt{3^2 + 4^2} = 5
             \end{equation}
 
-            \textbf{Note}: The subscript \textbf{'n'} is the total amount of \textbf{components} in a column when discussing vectors. \\
-            Also worth noting: When the magnitude of a vector is \textbf{equal to 1} it is known as a \textbf{unit vector}.
-
-    \subsection{Vector Operations}
-        \subsubsection{Vector Addition}
-            If both vectors are the same size of \textbf{'n'}, you can combine 2 vectors by adding there \textbf{components}.
+            \emph{Note}: The letter $n$ is commonly used to denote the length of a vector, which is the amount of elements it contains. \\
+            Also worth noting: A unit vector is a vector with a magnitude of 1.
+    
+        \subsection{Vector Addition}
+            If both vectors are the same length, you can combine 2 vectors by adding their \emph{components}.
             \begin{equation}
-                \mathbf{a + b} =
+                \vec{a + b} =
                     \begin{bmatrix} a_1 \\ a_2 \\ \cdot \\ \cdot \\ \cdot \\ a_n \end{bmatrix} +
                     \begin{bmatrix} b_1 \\ b_2 \\ \cdot \\ \cdot \\ \cdot \\ b_n \end{bmatrix} =
                     \begin{bmatrix} a_1 + b_2 \\ a_2 + b_2 \\ \cdot \\ \cdot \\ \cdot \\ a_n + a_b \end{bmatrix}
@@ -242,16 +268,16 @@ int main() {
 
             Example:
             \begin{equation}
-                \mathbf{a + b} =
+                \vec{a + b} =
                     \begin{bmatrix} 1 \\ 2 \\ 3 \\ 4 \end{bmatrix} +
                     \begin{bmatrix} 5 \\ 6 \\ 7 \\ 8 \end{bmatrix} =
                     \begin{bmatrix} 6 \\ 8 \\ 10 \\ 12 \end{bmatrix}
             \end{equation}
 
-        \subsubsection{Vector Subtraction}
-            If both vectors are the same size of \textbf{'n'}, you can subtract 2 vectors by adding there \textbf{components}.
+        \subsection{Vector Subtraction}
+            If both vectors are the same length, you can subtract 2 vectors by subtracting their \emph{components}.
             \begin{equation}
-                \mathbf{a - b} =
+                \vec{a - b} =
                     \begin{bmatrix} a_1 \\ a_2 \\ \cdot \\ \cdot \\ \cdot \\ a_n \end{bmatrix} -
                     \begin{bmatrix} b_1 \\ b_2 \\ \cdot \\ \cdot \\ \cdot \\ b_n \end{bmatrix} =
                     \begin{bmatrix} a_1 - b_2 \\ a_2 - b_2 \\ \cdot \\ \cdot \\ \cdot \\ a_n - a_b \end{bmatrix}
@@ -259,20 +285,21 @@ int main() {
 
             Example:
             \begin{equation}
-                \mathbf{a + b} =
+                \vec{a - b} =
                     \begin{bmatrix} 5 \\ 6 \\ 7 \\ 8 \end{bmatrix} -
                     \begin{bmatrix} 1 \\ 2 \\ 3 \\ 4 \end{bmatrix} =
                     \begin{bmatrix} 4 \\ 4 \\ 4 \\ 4 \end{bmatrix}
             \end{equation}
 
         \newpage
-        \subsubsection{Vector Scalar Multiplication}
-            Vector Scalar Multiplication is the act of multiplying a vector by a Scalar. You multiply the scalar to all \textbf{components} inside the vector.
+        \subsection{Scalar Multiplication}
+            Scalar multiplication is the act of multiplying a vector by a scalar. You multiply the scalar to all \emph{components} inside the vector.
 
             \begin{equation}
-                \mathbb{C} \cdot \mathbf{a} = \mathbb{C} \cdot
+                c \cdot \vec{a} = c \cdot
                     \begin{bmatrix} a_1 \\ a_2 \\ \cdot \\ \cdot \\ \cdot \\ a_n \end{bmatrix} =
-                    \begin{bmatrix}  \mathbb{C} \cdot a_1 \\  \mathbb{C} \cdot a_2 \\ \cdot \\ \cdot \\ \cdot \\  \mathbb{C} \cdot a_n \end{bmatrix}
+                    \begin{bmatrix}  c \cdot a_1 \\ c \cdot a_2 \\ \cdot \\ \cdot \\ \cdot \\  c \cdot a_n \end{bmatrix} 
+                \text{where } c \in \mathbb{R}
             \end{equation}
 
             Example:
@@ -281,70 +308,70 @@ int main() {
                 \begin{bmatrix} 5 \\ 10 \\ 15 \\ 20 \end{bmatrix}
             \end{equation}
 
-        \subsubsection{Dot Product}
-            A dot product (also known as a \textbf{inner product} is the sum of all components between to vectors.
+        \subsection{Dot Product}
+            The dot product (also known as the \emph{inner product} is the sum of all components between two vectors.
 
             Algebraically it can be used to measure the similarity between 2 vectors.
-            If you have 2 vectors of the same \textbf{'n'}:
+            If you have 2 vectors of the same size:
 
             \begin{equation}
-                \textbf{u} = \begin{bmatrix} u_1 \\ u_2 \\ \cdot \\ \cdot \\ \cdot \\ u_n \end{bmatrix},
-                \textbf{v} = \begin{bmatrix} v_1 \\ v_2 \\ \cdot \\ \cdot \\ \cdot \\ v_n \end{bmatrix} 
+                \vec{u} = \begin{bmatrix} u_1 \\ u_2 \\ \cdot \\ \cdot \\ \cdot \\ u_n \end{bmatrix},
+                \vec{v} = \begin{bmatrix} v_1 \\ v_2 \\ \cdot \\ \cdot \\ \cdot \\ v_n \end{bmatrix} 
             \end{equation}
 
             Then the \textbf{dot product} would be:
 
             \begin{equation}
-                \textbf{u} + \textbf{v} = u_1v_1 + u_2v_2 +\cdot \cdot \cdot + u_nv_n
+                \vec{u} \cdot \vec{v} = u_1v_1 + u_2v_2 +\cdot \cdot \cdot + u_nv_n
             \end{equation}
 
             \newpage
             Example:
 
             \begin{equation}
-                \textbf{u} = \begin{bmatrix} 2 \\ 3 \end{bmatrix},
-                \textbf{v} = \begin{bmatrix} 4 \\ -1 \end{bmatrix}
+                \vec{u} = \begin{bmatrix} 2 \\ 3 \end{bmatrix},
+                \vec{v} = \begin{bmatrix} 4 \\ -1 \end{bmatrix}
             \end{equation}
 
             \begin{equation}
-                \textbf{u} * \textbf{v} = (2 \cdot 4) + (4 \cdot -1) = 8 -3 = 5
+                \vec{u} \cdot \vec{v} = (2 \cdot 4) + (4 \cdot -1) = 8 -3 = 5
             \end{equation}
 
-            Geometrically the dot product can also relate to angles between vectors:
+            The dot product can also relate to angles between vectors:
 
             \begin{equation}
-                \textbf{u} \cdot \textbf{v} = \|\textbf{u}\| \|\textbf{v}\|\\cos\theta
+                \vec{u} \cdot \vec{v} = \|\vec{u}\| \|\vec{v}\|\\cos\theta
             \end{equation}
 
             \begin{itemize}
-                \item $\|\textbf{u}\|$ is the magnitude (length) of $\textbf{u}$
-                \item $\theta$ is the angle between $\|\textbf{u}\|$ and $\|\textbf{v}\|$
+                \item $\|\vec{u}\|$ is the magnitude (length) of $\vec{u}$
+                \item $\theta$ is the angle between $\|\vec{u}\|$ and $\|\vec{v}\|$
             \end{itemize}
 
             Useful notes:
 
             \begin{itemize}
-                \item If $\textbf{u} \cdot \textbf{v}$ 
+                \item If $\vec{u} \cdot \vec{v}$ 
                     > 0: Vectors are pointing in a similar direction.
-                \item If $\textbf{u} \cdot \textbf{v}$ 
-                    < 0: vectors are pointing in a opposite directions.
-                \item If $\textbf{u} \cdot \textbf{v}$ 
+                \item If $\vec{u} \cdot \vec{v}$ 
+                    < 0: vectors are pointing in opposite directions.
+                \item If $\vec{u} \cdot \vec{v}$ 
                     = 0: vectors are perpendicular
             \end{itemize}
 
-        \subsubsection{Cross Product}
-            Cross product is a operation that creates a new vector perpendicular to the inputted ones. This only works with 3D Vectors.
+        \subsection{Cross Product}
+            The cross product of two vectors is another vector that is perpendicular to both factors.
 
             \begin{equation}
-                \textbf{u} × \textbf{v} = \begin{bmatrix} a_2b_3 - a_3b_2 \\ a_3b_1 - a_1b_3 \\ a_1b_2 - a_2b_1 \end{bmatrix}
+                \vec{u} \times \vec{v} = \begin{bmatrix} a_2b_3 - a_3b_2 \\ a_3b_1 - a_1b_3 \\ a_1b_2 - a_2b_1 \end{bmatrix}
             \end{equation}
 
-        \subsubsection{Normalization}
-            Normalization converts the inputted vector into a \textbf{unit vector}.
+        \subsection{Normalization}
+            Normalization converts a vector into a \emph{unit vector}.
 
             \begin{equation}
-                \hat{a} = \frac{\textbf{a}}{||\textbf{a}||}
+                \hat{a} = \frac{\vec{a}}{||\vec{a}||}
             \end{equation}
 
-            When a vector is \textbf{hatted} (e.g., $\hat{a}, \hat{b}$)
+            When a vector is \emph{hatted} (e.g., $\hat{a}, \hat{b}$), it is a unit vector.
 \end{document}
